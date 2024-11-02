@@ -1,3 +1,52 @@
+/* Import Flowbite CSS */
+@import 'flowbite';
+
+/* Tailwind base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --color-primary: #FF6347; /* Tomato Red */
+    --color-secondary: #6B8E23; /* Olive Green */
+    --color-accent-1: #FFD700; /* Golden Yellow */
+    --color-accent-2: #F08080; /* Light Coral */
+    --color-background-light: #FAF3E0; /* Pale Beige */
+    --color-background-dark: #333333; /* Charcoal Gray */
+    --color-text-main: #2F4F4F; /* Dark Slate Gray */
+    --color-text-secondary: #696969; /* Dim Gray */
+}
+
+body {
+    background-color: var(--color-background-light);
+    color: var(--color-text-main);
+}
+
+.bg-primary {
+    background-color: var(--color-primary);
+}
+
+.bg-secondary {
+    background-color: var(--color-secondary);
+}
+
+.bg-accent-1 {
+    background-color: var(--color-accent-1);
+}
+
+.bg-accent-2 {
+    background-color: var(--color-accent-2);
+}
+
+.text-main {
+    color: var(--color-text-main);
+}
+
+.text-secondary {
+    color: var(--color-text-secondary);
+}
+
+.dark {
+    background-color: var(--color-background-dark);
+    color: var(--color-text-main);
+}
