@@ -1,4 +1,4 @@
-name: CI/CD Deployment Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -35,12 +35,11 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /htdocs         # Adjust to your server's root directory if necessary
+          server-dir: /htdocs/         # Add trailing slash here
           local-dir: ./               # Directory to upload
 
-      - name: Run migrations via webhook
-        env:
-          MIGRATION_KEY: ${{ secrets.MIGRATION_KEY }}
-        run: |
-          curl -X GET "https://yourdomain.infinityfreeapp.com/run-migrations?key=${MIGRATION_KEY}"
-
+      # - name: Run migrations via webhook
+      #   env:
+      #     MIGRATION_KEY: ${{ secrets.MIGRATION_KEY }}
+      #   run: |
+      #     curl -X GET "https://yourdomain.infinityfreeapp.com/run-migrations?key=${MIGRATION_KEY}"
