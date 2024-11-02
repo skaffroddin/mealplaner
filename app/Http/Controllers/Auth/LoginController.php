@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Socialite; // Make sure to import Socialite for Google authentication
 
 class LoginController extends Controller
 {
@@ -18,13 +18,29 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            // Authentication passed
             return redirect()->intended('home'); // Redirect to intended route
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
+    }
+
+    // Redirect to Google for authentication
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    // Handle Google callback
+    public function handleGoogleCallback()
+    {
+        $user = Socialite::driver('google')->user();
+
+        // Logic to handle user information after successful authentication
+        // For example, create or find user in the database and log them in
+
+        return redirect()->intended('home');
     }
 
     // Handle logout request

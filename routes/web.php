@@ -1,5 +1,5 @@
-
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RecipeController;
@@ -11,10 +11,10 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ChefController;
 use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\Auth\SocialAuthController;
-
+use App\Http\Controllers\UserController; 
 // Home route
 Route::get('/', function () {
-    return view('home'); // Ensure 'home.blade.php' exists in the resources/views directory
+    return view('home'); 
 })->name('home');
 
 // About page
@@ -39,26 +39,34 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 });
 
-// Protected routes that require authentication
 Route::middleware(['auth'])->group(function () {
     // Admin routes
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-        // Other admin routes can be added here
+        
+        // Admin User Management
+        Route::prefix('admin')->group(function () {
+            Route::get('/users', [UserController::class, 'index'])->name('admin.users.index'); // List users
+            Route::get('/users/{user}', [UserController::class, 'show'])->name('admin.users.show'); // Show user details
+            Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit'); // Edit user form
+            Route::post('/users', [UserController::class, 'store'])->name('admin.users.store'); // Create new user
+            Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update'); // Update user
+            Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy'); // Delete user
+            Route::post('/users/{user}/block', [UserController::class, 'block'])->name('admin.users.block'); // Block user
+            Route::post('/users/{user}/unblock', [UserController::class, 'unblock'])->name('admin.users.unblock'); // Unblock user
+        });
     });
 
     // Customer routes
     Route::middleware(['role:customer'])->group(function () {
         Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
-        // Other customer routes can be added here
     });
 
     // Chef routes
     Route::middleware(['role:chef'])->group(function () {
         Route::get('/chef', [ChefController::class, 'index'])->name('chef.index');
-        // Other chef routes can be added here
     });
-    
+
     // Social Auth Routes
     Route::get('auth/google', [SocialAuthController::class, 'redirectToGoogle']);
     Route::get('auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
