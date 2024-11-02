@@ -21,30 +21,28 @@ class RegisterController extends Controller
         // Validate the request data
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'phone_number' => 'required|string|max:20',
             'password' => 'required|string|min:8|confirmed',
             'date_of_birth' => 'required|date',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Optional
             'state' => 'required|string|max:255',
             'country' => 'required|string|max:255',
-            'gender' => 'required|string|in:male,female,other', // Example gender options
-            'role' => 'required|string|in:customer,chef', // Only customer or chef roles allowed
+            'gender' => 'required|string|in:male,female,other',
+            'role' => 'required|string|in:customer,chef',
         ]);
 
         // Handle the profile photo upload
-        if ($request->hasFile('profile_photo')) {
-            $photoPath = $request->file('profile_photo')->store('profile_photos', 'public');
-        } else {
-            $photoPath = null; // Set to null if no file is uploaded
-        }
+        $photoPath = $request->hasFile('profile_photo')
+            ? $request->file('profile_photo')->store('profile_photos', 'public')
+            : null;
 
         // Create the user
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->password), // Hash the password
             'date_of_birth' => $request->date_of_birth,
             'profile_photo' => $photoPath,
             'state' => $request->state,

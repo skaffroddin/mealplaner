@@ -1,85 +1,34 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\RecipeController;
-use App\Http\Controllers\MealPlanController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\AdminController; // Add this
-use App\Http\Controllers\CustomerController; // Add this
-use App\Http\Controllers\ChefController; // Add this
-use App\Http\Controllers\Auth\SocialLoginController;
+use App\Http\Controllers\Admin\UserController;
 
-use App\Http\Controllers\Auth\SocialAuthController;
-// Home route
-Route::get('/', function () {
-    return view('home'); // Ensure 'home.blade.php' exists in the resources/views directory
-})->name('home');
+// Authentication Routes
+Route::get('/login', [LoginController::class, 'create'])->name('login'); // Show the login form
+Route::post('/login', [LoginController::class, 'login']); // Handle the login request
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout'); // Handle logout
 
-// About page
-Route::get('/about', [PageController::class, 'about'])->name('about');
+// Registration Routes
+Route::get('/register', [RegisterController::class, 'create'])->name('register'); // Show the registration form
+Route::post('/register', [RegisterController::class, 'store']); // Handle the registration request
 
-// Recipe index
-Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes');
-
-// Meal plans
-Route::get('/meal-plans', [MealPlanController::class, 'index'])->name('meal-plans');
-
-// Contact page
-Route::get('/contact', [PageController::class, 'contact'])->name('contact');
-
-
-
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
-
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']); // If using traditional login
-Route::get('login/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
-Route::get('login/google/callback', [LoginController::class, 'handleGoogleCallback']);
-
-Route::get('/register', [RegisterController::class, 'create'])->name('register.create');
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-
-
-// For AJAX registration
-
-// Protected routes that require authentication
-Route::middleware(['auth'])->group(function () {
-    // Admin routes
-    Route::middleware(['role:admin'])->group(function () {
-        Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-        // Other admin routes can be added here
+// Admin Routes
+Route::middleware('auth') // Ensure only authenticated users can access these routes
+    ->prefix('admin') 
+    ->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('admin.users.index'); // List users
+        Route::get('/users/{user}', [UserController::class, 'show'])->name('admin.users.show'); // Show user details
+        Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit'); // Edit user form
+        Route::post('/users', [UserController::class, 'store'])->name('admin.users.store'); // Create new user
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update'); // Update user
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy'); // Delete user
+        Route::post('/users/{user}/block', [UserController::class, 'block'])->name('admin.users.block'); // Block user
+        Route::post('/users/{user}/unblock', [UserController::class, 'unblock'])->name('admin.users.unblock'); // Unblock user
     });
 
-    // Customer routes
-    Route::middleware(['role:customer'])->group(function () {
-        Route::get('/customer', [CustomerController::class, 'index'])->name('customer.index');
-        // Other customer routes can be added here
-    });
-
-    // Chef routes
-    Route::middleware(['role:chef'])->group(function () {
-        Route::get('/chef', [ChefController::class, 'index'])->name('chef.index');
-        // Other chef routes can be added here
-    });
-
-
-// Login with Google
-Route::get('login/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
-Route::get('login/google/callback', [LoginController::class, 'handleGoogleCallback']);
-
-
-
-Route::get('login/google', [SocialLoginController::class, 'redirectToGoogle'])->name('login.google');
-Route::get('login/google/callback', [SocialLoginController::class, 'handleGoogleCallback']);
-
-Route::get('auth/google', [SocialAuthController::class, 'redirectToGoogle']);
-Route::get('auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
-
-Route::get('auth/facebook', [SocialAuthController::class, 'redirectToFacebook']);
-Route::get('auth/facebook/callback', [SocialAuthController::class, 'handleFacebookCallback']);
-
-});
+// Home Route
+Route::get('/home', function () {
+    return view('home'); // Your home view
+})->middleware('auth'); // Only accessible to authenticated users

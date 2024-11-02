@@ -1,42 +1,48 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
-use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
     // Show the login form
-    public function showLoginForm()
+    public function create()
     {
-        return view('auth.login'); // Create a login view in resources/views/auth
+        return view('auth.login'); // Point to your login view
     }
 
-    // Redirect to Google
-    public function redirectToGoogle()
+    // Handle the login request
+    public function store(Request $request)
     {
-        return Socialite::driver('google')->redirect();
-    }
-
-    // Handle Google callback
-    public function handleGoogleCallback()
-    {
-        $googleUser = Socialite::driver('google')->user();
-
-        // Find or create a user in your database
-        $user = User::firstOrCreate([
-            'email' => $googleUser->getEmail(),
-        ], [
-            'name' => $googleUser->getName(),
-            'profile_photo' => $googleUser->getAvatar(),
-            'password' => '', // Set a default value or null
+        // Validate the request data
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
         ]);
 
-        Auth::login($user, true);
+        // Attempt to log the user in
+        $user = User::where('email', $request->email)->first();
+        
+        if ($user && Hash::check($request->password, $user->password)) {
+            // The password is correct, log in the user
+            Auth::login($user);
+            return redirect()->intended('/home'); // Redirect to intended URL or home
+        }
 
-        return redirect()->intended('/home'); // Redirect after successful login
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
+    }
+
+    // Handle the logout request
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/login');
     }
 }

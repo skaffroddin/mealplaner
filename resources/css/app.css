@@ -1,5 +1,9 @@
 /* Import Flowbite CSS */
 @import 'flowbite';
+/* app.css */
+@import '~@fortawesome/fontawesome-free/css/all.css';
+
+
 
 /* Tailwind base styles */
 @tailwind base;
