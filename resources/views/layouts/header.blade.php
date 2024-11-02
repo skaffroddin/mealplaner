@@ -3,7 +3,7 @@
     <nav class="bg-white dark:bg-black fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-700 shadow-lg">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-6 py-3">
             <!-- Logo -->
-            <a href="/" class="flex items-center space-x-2 rtl:space-x-reverse">
+            <a href="{{ route('home') }}" class="flex items-center space-x-2 rtl:space-x-reverse">
                 <span class="self-center text-2xl font-bold whitespace-nowrap text-black dark:text-white">
                     Meal<span class="text-orange-500">plan</span>
                 </span>
@@ -33,10 +33,10 @@
                         <a href="{{ route('about') }}" class="block py-2 px-3 text-black dark:text-white transition duration-200 group-hover:text-orange-500">About Us</a>
                     </li>
                     <li class="group relative hover:bg-gray-200 dark:hover:bg-gray-800 rounded transition duration-200">
-                        <a href="{{ route('recipes') }}" class="block py-2 px-3 text-black dark:text-white transition duration-200 group-hover:text-orange-500">Recipes</a>
+                        <a href="{{ route('home') }}" class="block py-2 px-3 text-black dark:text-white transition duration-200 group-hover:text-orange-500">Recipes</a>
                     </li>
                     <li class="group relative hover:bg-gray-200 dark:hover:bg-gray-800 rounded transition duration-200">
-                        <a href="{{ route('meal-plans') }}" class="block py-2 px-3 text-black dark:text-white transition duration-200 group-hover:text-orange-500">Meal Plans</a>
+                        <a href="{{ route('home') }}" class="block py-2 px-3 text-black dark:text-white transition duration-200 group-hover:text-orange-500">Meal Plans</a>
                     </li>
                     <li class="group relative hover:bg-gray-200 dark:hover:bg-gray-800 rounded transition duration-200">
                         <a href="{{ route('login') }}" class="block py-2 px-3 text-black dark:text-white transition duration-200 group-hover:text-orange-500">My Account</a>

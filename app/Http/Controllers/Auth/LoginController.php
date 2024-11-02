@@ -1,37 +1,25 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
-
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
     // Show the login form
-    public function create()
+    public function showLoginForm()
     {
-        return view('auth.login'); // Point to your login view
+        return view('auth.login');
     }
 
-    // Handle the login request
-    public function store(Request $request)
+    // Handle login request
+    public function login(Request $request)
     {
-        // Validate the request data
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+        $credentials = $request->only('email', 'password');
 
-        // Attempt to log the user in
-        $user = User::where('email', $request->email)->first();
-        
-        if ($user && Hash::check($request->password, $user->password)) {
-            // The password is correct, log in the user
-            Auth::login($user);
-            return redirect()->intended('/home'); // Redirect to intended URL or home
+        if (Auth::attempt($credentials)) {
+            // Authentication passed
+            return redirect()->intended('home'); // Redirect to intended route
         }
 
         return back()->withErrors([
@@ -39,10 +27,10 @@ class LoginController extends Controller
         ]);
     }
 
-    // Handle the logout request
-    public function logout()
+    // Handle logout request
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/login');
+        return redirect('/login'); // Redirect after logout
     }
 }
