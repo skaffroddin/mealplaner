@@ -1,9 +1,5 @@
 /* Import Flowbite CSS */
 @import 'flowbite';
-/* app.css */
-
-
-
 
 /* Tailwind base styles */
 @tailwind base;
@@ -19,6 +15,11 @@
     --color-background-dark: #333333; /* Charcoal Gray */
     --color-text-main: #2F4F4F; /* Dark Slate Gray */
     --color-text-secondary: #696969; /* Dim Gray */
+}
+
+/* Apply Poppins font to all elements */
+* {
+    font-family: "Poppins", sans-serif;
 }
 
 body {
@@ -53,4 +54,9 @@ body {
 .dark {
     background-color: var(--color-background-dark);
     color: var(--color-text-main);
+}
+
+/* Custom Progress Bar */
+.progress-bar {
+    background-color: var(--color-accent-1); /* Use accent color */
 }

@@ -6,6 +6,8 @@
     <title>Admin Dashboard</title>
 </head>
 <body>
+
+
 @include('layouts.header')
     <h1>Welcome to Admin Dashboard</h1>
     <!-- Admin functionalities go here -->

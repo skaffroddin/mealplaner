@@ -17,7 +17,6 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, ?string $role = null)
     {
-        // Your role-checking logic here
 
         return $next($request);
     }

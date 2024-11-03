@@ -9,51 +9,57 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ChefController;
-use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\Auth\SocialAuthController;
-use App\Http\Controllers\UserController; 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\OTPController;
+
 // Home route
 Route::get('/', function () {
-    return view('home'); 
+    return view('home');
 })->name('home');
 
-// About page
+// OTP Verification routes
+// OTP Verification routes
+Route::get('/otp/verify/{user_id}', [OTPController::class, 'showForm'])->name('otp.form');
+Route::post('/otp/verify', [OTPController::class, 'verify'])->name('otp.verify');
+
+
+// Pages
 Route::get('/about', [PageController::class, 'about'])->name('about');
-
-// Recipe index
 Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes');
-
-// Meal plans
 Route::get('/meal-plans', [MealPlanController::class, 'index'])->name('meal-plans');
-
-// Contact page
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 
 // Authentication routes
 Route::prefix('auth')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
-    Route::get('login/google', [LoginController::class, 'redirectToGoogle'])->name('login.google');
-    Route::get('login/google/callback', [LoginController::class, 'handleGoogleCallback']);
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/register', [RegisterController::class, 'create'])->name('register.create');
     Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+
+    // Social Auth
+    Route::get('/google', [SocialAuthController::class, 'redirectToGoogle'])->name('login.google');
+    Route::get('/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+    Route::get('/facebook', [SocialAuthController::class, 'redirectToFacebook']);
+    Route::get('/facebook/callback', [SocialAuthController::class, 'handleFacebookCallback']);
 });
 
+// Authenticated routes
 Route::middleware(['auth'])->group(function () {
     // Admin routes
-    Route::middleware(['role:admin'])->group(function () {
-        Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-        
-        // Admin User Management
-        Route::prefix('admin')->group(function () {
-            Route::get('/users', [UserController::class, 'index'])->name('admin.users.index'); // List users
-            Route::get('/users/{user}', [UserController::class, 'show'])->name('admin.users.show'); // Show user details
-            Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit'); // Edit user form
-            Route::post('/users', [UserController::class, 'store'])->name('admin.users.store'); // Create new user
-            Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update'); // Update user
-            Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy'); // Delete user
-            Route::post('/users/{user}/block', [UserController::class, 'block'])->name('admin.users.block'); // Block user
-            Route::post('/users/{user}/unblock', [UserController::class, 'unblock'])->name('admin.users.unblock'); // Unblock user
+    Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+
+        Route::prefix('users')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('admin.users.index');
+            Route::get('/{user}', [UserController::class, 'show'])->name('admin.users.show');
+            Route::get('/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+            Route::post('/', [UserController::class, 'store'])->name('admin.users.store');
+            Route::put('/{user}', [UserController::class, 'update'])->name('admin.users.update');
+            Route::delete('/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+            Route::post('/{user}/block', [UserController::class, 'block'])->name('admin.users.block');
+            Route::post('/{user}/unblock', [UserController::class, 'unblock'])->name('admin.users.unblock');
         });
     });
 
@@ -66,10 +72,4 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:chef'])->group(function () {
         Route::get('/chef', [ChefController::class, 'index'])->name('chef.index');
     });
-
-    // Social Auth Routes
-    Route::get('auth/google', [SocialAuthController::class, 'redirectToGoogle']);
-    Route::get('auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
-    Route::get('auth/facebook', [SocialAuthController::class, 'redirectToFacebook']);
-    Route::get('auth/facebook/callback', [SocialAuthController::class, 'handleFacebookCallback']);
 });

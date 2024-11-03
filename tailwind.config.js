@@ -1,11 +1,15 @@
-// tailwind.config.js
+import flowbite from 'flowbite/plugin';
+
 export default {
   content: [
-      './resources/**/*.{html,js,php}', // Update according to your file paths
-      './resources/views/**/*.blade.php',
+    './resources/**/*.{html,js,php}',
+    './resources/views/**/*.blade.php',
+    './node_modules/flowbite/**/*.js',
   ],
   theme: {
-      extend: {},
+    extend: {},
   },
-  plugins: [],
+  plugins: [
+    flowbite, // Use the imported plugin directly
+  ],
 };

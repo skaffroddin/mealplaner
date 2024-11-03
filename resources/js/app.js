@@ -1,6 +1,11 @@
+// Import Tailwind CSS
 import '../css/app.css';
 
-import 'flowbite'; // Import Flowbite
-import $ from 'jquery'; // Correctly import jQuery
+// Import jQuery and Flowbite
+import $ from 'jquery'; 
+import 'flowbite';
 
 // Your other JavaScript code here
+$(document).ready(function() {
+    console.log('jQuery is ready!');
+});

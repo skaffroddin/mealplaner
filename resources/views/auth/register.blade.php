@@ -1,23 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    @vite('resources/css/app.css')
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            font-family: "Poppins", sans-serif;
-        }`
-        body {
-            background-color: #f8fafc; /* Light background color */
-        }
-    </style>
-</head>
-<body>
 
-@include('layouts.header')
+@extends('layouts.header')
 
 <div class="container mx-auto mt-10">
     <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
@@ -141,7 +123,6 @@
     </div>
 </div>
 
-@include('layouts.footer')
 
 </body>
 </html>
