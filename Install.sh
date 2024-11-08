@@ -3,6 +3,7 @@ composer install --no-dev --prefer-dist --optimize-autoloader
 cp env-final .env
 php artisan key:generate
 npm install
+nvm inastall
 php artisan config:cache 
 php artisan route:cache 
 php artisan view:cache 
