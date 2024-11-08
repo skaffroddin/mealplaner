@@ -1,5 +1,5 @@
 composer install --no-dev --prefer-dist --optimize-autoloader
-npm install laravel-mix tailwindcss postcss autoprefixer --save-dev
+# npm install laravel-mix tailwindcss postcss autoprefixer --save-dev
 cp env-final .env
 php artisan key:generate
 npm install
@@ -10,10 +10,10 @@ php artisan serve
 
 
 # cp .env.example .env
-#         php artisan key:generate
-# 2.npm install
-# 3. npx tailwindcss -o public/css/tailwind.css --minify
-# 4. npm run build
+# php artisan key:generate
+# npm install
+# npx tailwindcss -o public/css/tailwind.css --minify
+# npm run build
 
 
 # cp .env.example .env
